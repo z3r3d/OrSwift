@@ -45,7 +45,7 @@ Instead of repeating `nil` checks and fallback operators throughout your code, `
 - 🧪 Drop-in adoption with minimal refactoring
 - 🛠️ Compiler-friendly inlining annotations on key accessors
 - 📝 Comprehensive test coverage for reliability
-- 🛟 Flexible fallback handling via `.or(value)` and `Or.this(optional:default:)`
+- 🛟 Flexible fallback handling via type-safe `.or(value)` and `Or.this(optional:default:)`
 
 ## Supported Types
 
@@ -69,7 +69,7 @@ All `Numeric` protocol conforming types:
 - Property: `.orEmpty` - Returns appropriate empty collection for `nil` values
 
 ### Custom Types
-- Generic `.or(_:)` method for any type
+- Type-safe `.or(_:)` method with same-type fallback
 - Static `Or.this(optional:default:)` method for explicit handling
 
 ## Requirements
@@ -140,7 +140,7 @@ let optionalSet: Set<String>? = nil
 let set = optionalSet.orEmpty           // Returns Set<String>()
 ```
 
-#### Custom Types with Generic Methods
+#### Custom Types with `.or(_:)` and `Or.this(...)`
 ```swift
 struct User {
     let name: String
@@ -154,6 +154,15 @@ let user = optionalUser.or(defaultUser)
 
 // Using the static Or.this() method
 let user2 = Or.this(optional: optionalUser, default: defaultUser)
+```
+
+#### Type Safety Notes for `.or(_:)`
+```swift
+let name: String? = "Chris"
+let safe = name.or("Guest")   // OK
+
+// let invalid = name.or(0)
+// Compile-time error: fallback must be the same type as Wrapped
 ```
 
 ### Advanced Usage
@@ -208,7 +217,8 @@ public final class Or: Thisable
 ##### Returns the wrapped value when present, otherwise the provided fallback.
 ```swift
 public protocol Orable {
-    func or<T>(_ value: T) -> T
+    associatedtype OrValue
+    func or(_ value: OrValue) -> OrValue
 }
 ```
 

@@ -467,4 +467,27 @@ final class OrTests: XCTestCase {
         XCTAssertTrue(testVar4.or(orValue3) == orValue3, failureMessage2)
         XCTAssertFalse(testVar3.or(orValue3) == orValue4, failureMessage2)
     }
+
+    /// Regression test for `or(_:)` non-nil behavior.
+    ///
+    /// Ensures the wrapped value is returned when the optional is non-nil,
+    /// even if the fallback value is different.
+    func testOptionalOrPrefersWrappedValueWhenNonNil() throws {
+
+        let failureMessage = "Test `testOptionalOrPrefersWrappedValueWhenNonNil` failed"
+
+        let wrappedString = "Primary Value"
+        let fallbackString = "Fallback Value"
+        let nonNilString: String? = wrappedString
+
+        XCTAssertTrue(nonNilString.or(fallbackString) == wrappedString, failureMessage)
+        XCTAssertFalse(nonNilString.or(fallbackString) == fallbackString, failureMessage)
+
+        let wrappedInt = 42
+        let fallbackInt = 711
+        let nonNilInt: Int? = wrappedInt
+
+        XCTAssertTrue(nonNilInt.or(fallbackInt) == wrappedInt, failureMessage)
+        XCTAssertFalse(nonNilInt.or(fallbackInt) == fallbackInt, failureMessage)
+    }
 }

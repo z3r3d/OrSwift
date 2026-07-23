@@ -49,33 +49,13 @@ public let OrNameArt: String =
 /// // displayName is "Guest User"
 /// ```
 public protocol Orable {
+    associatedtype OrValue
+
     /// Returns the unwrapped value if it exists, otherwise returns the provided fallback value.
     ///
     /// - Parameter value: The fallback value to return if `self` is `nil`
     /// - Returns: The unwrapped value or the fallback value
-    func or<T>(_ value: T) -> T
-}
-
-public extension Orable {
-    
-    /// Default implementation of the `or(_:)` method for all value types.
-    ///
-    /// This method attempts to cast `self` to type `T`. If the cast succeeds,
-    /// it returns the casted value. If the cast fails (typically when `self` is `nil`),
-    /// it returns the provided fallback value.
-    ///
-    /// - Parameter value: The fallback value to return if casting fails
-    /// - Returns: The casted value or the fallback value
-    ///
-    /// ## Example
-    /// ```swift
-    /// let optionalNumber: Int? = nil
-    /// let result = optionalNumber.or(42)
-    /// // result is 42
-    /// ```
-    func or<T>(_ value: T) -> T {
-        return self as? T ?? value
-    }
+    func or(_ value: OrValue) -> OrValue
 }
 
 /// A protocol that provides static methods for explicit optional handling with default values.
@@ -151,7 +131,14 @@ public final class Or: Thisable {
 ///
 /// This extension automatically makes the `or(_:)` method available on all optional values,
 /// enabling convenient fallback value assignment without explicit unwrapping.
-extension Optional: Orable {}
+extension Optional: Orable {
+    public typealias OrValue = Wrapped
+
+    @inlinable
+    public func or(_ value: Wrapped) -> Wrapped {
+        return self ?? value
+    }
+}
 
 
 // MARK: - Extensions

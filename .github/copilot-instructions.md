@@ -131,8 +131,7 @@ To add a **new collection type** to `.orEmpty`:
 ## Known Issues & Workarounds
 
 - **`Collection.orEmpty` and custom collection types:** The current implementation only supports `Array`, `Set`, and `Dictionary` via runtime casting. Any other `Collection`-conforming type will hit `fatalError` at runtime. This is a known design limitation; document it clearly if you add new collection support.
-- **`StringProtocol.orEmpty` returns `""` literal:** The `guard let self = self else { return "" }` returns a `String` literal cast to `Wrapped`. This works for `String` and `Substring` but may behave unexpectedly for custom `StringProtocol` conformances. Prefer using `.or("fallback")` for non-standard `StringProtocol` types.
-- **macOS-only CI:** The workflow runs on `macos-latest`. There is no Linux CI. If Linux compatibility is important, a separate job should be added.
+- **`StringProtocol.orEmpty` returns `""` literal:** The implementation returns a string literal in the `nil` branch. This works for `String` and `Substring` but may behave unexpectedly for custom `StringProtocol` conformances. Prefer using `.or("fallback")` for non-standard `StringProtocol` types.
 
 ---
 

@@ -77,13 +77,13 @@ CI runs on `macos-latest` via `.github/workflows/swift.yml`, triggered on push/P
 | `Optional<Bool>.orTrue` | Extension on `Optional where Wrapped == Bool` | Returns `true` when nil |
 | `Optional<Bool>.orFalse` | Extension on `Optional where Wrapped == Bool` | Returns `false` when nil |
 | `Optional<Numeric>.orZero` | Extension on `Optional where Wrapped: Numeric` | Returns `.zero` when nil |
-| `Optional<Collection>.orEmpty` | Extension on `Optional where Wrapped: Collection` | Returns empty Array/Set/Dictionary when nil; `fatalError` for unsupported types |
+| `Optional<Collection>.orEmpty` | Extension on `Optional where Wrapped: Collection` | Returns `self` when non-nil; returns empty Array/Set/Dictionary when nil; `fatalError` when nil with an unsupported collection type |
 | `OrNameArt` | Top of `Or.swift` | ASCII art banner string — decorative, not functional |
 
 ### Implementation Notes
 
 - Computed properties on Optional extensions use `@inlinable` + `@inline(__always)` for zero-overhead access.
-- `Optional.orEmpty` on `Collection` uses runtime type-casting (`[] as? Wrapped`, `[:] as? Wrapped`, `Set<AnyHashable>([]) as? Wrapped`) and calls `fatalError` for unsupported collection types. This is intentional — adding new supported collection types requires extending this guard block.
+- `Optional.orEmpty` on `Collection` returns `self` for non-nil values; when nil, uses runtime type-casting (`[] as? Wrapped`, `[:] as? Wrapped`, `Set<AnyHashable>([]) as? Wrapped`) to return an empty collection, and calls `fatalError` only when nil and the wrapped type is not Array, Set, or Dictionary. Adding new supported collection types requires extending this guard block.
 - `Or` is a `final class` with a `private init()` — it is a pure namespace, not meant to be instantiated.
 - There are **no external dependencies** — the package is dependency-free.
 
@@ -130,7 +130,7 @@ To add a **new collection type** to `.orEmpty`:
 
 ## Known Issues & Workarounds
 
-- **`Collection.orEmpty` and custom collection types:** The current implementation only supports `Array`, `Set`, and `Dictionary` via runtime casting. Any other `Collection`-conforming type will hit `fatalError` at runtime. This is a known design limitation; document it clearly if you add new collection support.
+- **`Collection.orEmpty` and custom collection types:** The current implementation only supports `Array`, `Set`, and `Dictionary` via runtime casting. Non-nil values always return `self`. When the optional is `nil` and the wrapped type is not one of the supported types, a `fatalError` is triggered at runtime. This is a known design limitation; document it clearly if you add new collection support.
 - **`StringProtocol.orEmpty` returns `""` literal:** The implementation returns a string literal in the `nil` branch. This works for `String` and `Substring` but may behave unexpectedly for custom `StringProtocol` conformances. Prefer using `.or("fallback")` for non-standard `StringProtocol` types.
 
 ---

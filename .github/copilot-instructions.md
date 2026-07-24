@@ -93,7 +93,7 @@ CI runs on `macos-latest` via `.github/workflows/swift.yml`, triggered on push/P
 
 - **File header:** Every Swift file starts with the standard comment block (filename, project name, author, copyright year, license).
 - **MARK sections:** Use `// MARK: - Core` and `// MARK: Adoption` to organize sections in `Or.swift`.
-- **Documentation comments:** All public types, protocols, properties, and methods have `///` doc comments with `## Example Usage` and `- Returns:` / `- Complexity:` tags.
+- **Documentation comments:** Most public types, protocols, properties, and methods have `///` doc comments with `## Example Usage` and `- Returns:` / `- Complexity:` tags (see `Sources/Or/Or.swift`).
 - **Naming:** Follow Swift API Design Guidelines. New optional-unwrapping helpers follow the `or<DefaultName>` naming pattern (e.g., `orEmpty`, `orZero`, `orTrue`, `orFalse`).
 - **No force-unwraps** in the library itself; `fatalError` is used only in the unsupported collection branch of `.orEmpty`.
 

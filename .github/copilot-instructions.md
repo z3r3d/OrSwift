@@ -124,7 +124,7 @@ To add support for a **new type-specific optional default** (e.g., `orNaN` for f
 To add a **new collection type** to `.orEmpty`:
 
 1. Extend the `guard let self = self else { ... }` block in `extension Optional where Wrapped: Collection` with an additional `if let empty... as? Wrapped` branch.
-2. Add a test case in `OrTests.swift`.
+2. Add a test case in `Tests/OrTests/OrTests.swift`.
 
 ---
 

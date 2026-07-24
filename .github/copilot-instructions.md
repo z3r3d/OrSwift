@@ -64,8 +64,8 @@ CI runs on `macos-latest` via `.github/workflows/swift.yml`, triggered on push/P
 
 | Protocol | Purpose |
 |---|---|
-| `Orable` | Defines `func or(_ value: OrValue) -> OrValue` — implemented by `Optional` extension |
-| `Thisable` | Defines `static func this<T>(optional: T?, default: T) -> T` — implemented by `Or` class |
+| `Orable` | Defines `func or(_ value: OrValue) -> OrValue` — adopted by the `Optional` extension |
+| `Thisable` | Defines `static func this<T>(optional:default:) -> T` — default implementation via a `Thisable` protocol extension; `Or` conforms |
 
 ### Public API Surface
 

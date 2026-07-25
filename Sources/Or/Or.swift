@@ -106,7 +106,7 @@ public extension Thisable {
 }
 
 
-// MARK: Adoption
+// MARK: - Adoption
 
 /// A utility class that provides static methods for optional handling.
 ///

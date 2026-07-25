@@ -92,11 +92,11 @@ final class OrTests: XCTestCase {
         let orValue: Bool = true
         
         let testVar1: Bool? = true
-        let testVar2A: Bool? = false
+        let testVar2False: Bool? = false
         let testVar2: Bool? = nil
         
         XCTAssertTrue(testVar1.orTrue, failureMessage)
-        XCTAssertFalse(testVar2A.orTrue, failureMessage)
+        XCTAssertFalse(testVar2False.orTrue, failureMessage)
         XCTAssertTrue(testVar1.orFalse, failureMessage)
         XCTAssertTrue(testVar2.orTrue, failureMessage)
         XCTAssertFalse(testVar2.orFalse, failureMessage)

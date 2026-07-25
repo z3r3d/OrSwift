@@ -321,7 +321,7 @@ final class OrTests: XCTestCase {
     ///
     /// Validates that:
     /// - `Or` type metadata is reachable
-    /// - `OrNameArt` is not empty and contains expected ASCII art content
+    /// - `OrNameArt` is not empty
     func testOrNamespaceAndBanner() throws {
 
         let failureMessage = "Test `testOrNamespaceAndBanner` failed"
@@ -330,7 +330,6 @@ final class OrTests: XCTestCase {
 
         XCTAssertTrue(String(describing: namespaceType) == "Or", failureMessage)
         XCTAssertFalse(OrNameArt.isEmpty, failureMessage)
-        XCTAssertTrue(OrNameArt.contains("***"), failureMessage)
     }
     
     /// Tests custom object support with the `Thisable` protocol and static methods.

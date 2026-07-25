@@ -98,6 +98,7 @@ final class OrTests: XCTestCase {
         XCTAssertTrue(testVar1.orTrue, failureMessage)
         XCTAssertFalse(testVar2False.orTrue, failureMessage)
         XCTAssertTrue(testVar1.orFalse, failureMessage)
+        XCTAssertFalse(testVar2False.orFalse, failureMessage)
         XCTAssertTrue(testVar2.orTrue, failureMessage)
         XCTAssertFalse(testVar2.orFalse, failureMessage)
         XCTAssertTrue(testVar2.or(orValue), failureMessage)

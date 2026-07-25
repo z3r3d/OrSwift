@@ -118,7 +118,7 @@ final class OrTests: XCTestCase {
         let testVar1: Substring? = base.prefix(5)
         let testVar2: Substring? = nil
 
-        XCTAssertTrue(String(testVar1.orEmpty) == "Hello", failureMessage)
+        XCTAssertEqual(String(testVar1.orEmpty), "Hello", failureMessage)
         XCTAssertTrue(testVar2.orEmpty.isEmpty, failureMessage)
     }
     

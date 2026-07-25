@@ -125,7 +125,9 @@ public extension Thisable {
 ///   to be used solely as a static namespace.
 public final class Or: Thisable {
     /// Private initializer enforces the namespace-only contract of this class.
+    // SWIFT_COVERAGE_IGNORE_START
     private init() {}
+    // SWIFT_COVERAGE_IGNORE_END
 }
 
 /// Extends all Optional types to conform to `Orable`, providing the `or(_:)` method.
@@ -347,8 +349,11 @@ extension Optional where Wrapped: Collection {
                     return emptySet
                 }
 
+                // SWIFT_COVERAGE_IGNORE_START
                 fatalError("`orEmpty` is only available for Set, Array and Dictionary collections.")
+                // SWIFT_COVERAGE_IGNORE_END
             }
+           
             
             return self
         }

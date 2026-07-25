@@ -30,7 +30,7 @@ jobs:
     - name: Export Coverage Report
       run: |
         BIN_PATH=$(swift build --show-bin-path)
-        XCTEST_BUNDLE=$(find "${BIN_PATH}" -maxdepth 1 -name "*.xctest" -type d | head -1)
+        XCTEST_BUNDLE=$(find "${BIN_PATH}" -maxdepth 1 -type d -name "*.xctest" | head -1)
         [ -z "${XCTEST_BUNDLE}" ] && { echo "Error: No xctest bundle found in ${BIN_PATH}"; exit 1; }
         XCTEST_NAME=$(basename "${XCTEST_BUNDLE}" .xctest)
         xcrun llvm-cov export \

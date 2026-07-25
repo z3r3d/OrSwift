@@ -110,8 +110,7 @@ final class OrTests: XCTestCase {
     /// - Non-nil optional substrings return their original value
     /// - Nil optional substrings return an empty substring
     ///
-    /// - Throws: `XCTestError` if any assertion fails
-    func testOptionalSubstring() throws {
+    func testOptionalSubstring() {
 
         let failureMessage = "Test `testOptionalSubstring` failed"
 

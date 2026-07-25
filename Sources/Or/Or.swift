@@ -125,8 +125,7 @@ public extension Thisable {
 ///   to be used solely as a static namespace.
 public final class Or: Thisable {
     /// Private initializer enforces the namespace-only contract of this class.
-    /// This initializer is intentionally private and excluded from coverage reporting.
-    private init(){} // LCOV_EXCL_LINE
+    private init() {}
 }
 
 /// Extends all Optional types to conform to `Orable`, providing the `or(_:)` method.

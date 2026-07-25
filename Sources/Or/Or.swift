@@ -123,8 +123,10 @@ public extension Thisable {
 ///
 /// - Note: This class cannot be instantiated as it has a private initializer.
 public final class Or: Thisable { 
-    /// Private initializer prevents instantiation of this utility class.
-    private init(){} 
+    /// Internal initializer prevents external instantiation of this utility class.
+    /// Marked `internal` (rather than `private`) to allow `@testable import Or` to
+    /// exercise this initializer for code coverage purposes.
+    internal init(){} 
 }
 
 /// Extends all Optional types to conform to `Orable`, providing the `or(_:)` method.

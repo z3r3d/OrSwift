@@ -92,11 +92,34 @@ final class OrTests: XCTestCase {
         let orValue: Bool = true
         
         let testVar1: Bool? = true
+        let testVar2A: Bool? = false
         let testVar2: Bool? = nil
         
         XCTAssertTrue(testVar1.orTrue, failureMessage)
+        XCTAssertFalse(testVar2A.orTrue, failureMessage)
+        XCTAssertTrue(testVar1.orFalse, failureMessage)
+        XCTAssertTrue(testVar2.orTrue, failureMessage)
         XCTAssertFalse(testVar2.orFalse, failureMessage)
         XCTAssertTrue(testVar2.or(orValue), failureMessage)
+    }
+
+    /// Tests optional Substring handling with the `orEmpty` property.
+    ///
+    /// Validates that:
+    /// - Non-nil optional substrings return their original value
+    /// - Nil optional substrings return an empty substring
+    ///
+    /// - Throws: `XCTestError` if any assertion fails
+    func testOptionalSubstring() throws {
+
+        let failureMessage = "Test `testOptionalSubstring` failed"
+
+        let base = "Hello World"
+        let testVar1: Substring? = base.prefix(5)
+        let testVar2: Substring? = nil
+
+        XCTAssertTrue(String(testVar1.orEmpty) == "Hello", failureMessage)
+        XCTAssertTrue(testVar2.orEmpty.isEmpty, failureMessage)
     }
     
     /// Tests optional Int handling with the `orZero` property.
@@ -292,6 +315,22 @@ final class OrTests: XCTestCase {
         
         XCTAssertTrue(Or.this(optional: testVar1, default: orValue1) == orValue1, failureMessage)
         XCTAssertTrue(Or.this(optional: testVar2, default: orValue2) == orValue2, failureMessage)
+    }
+
+    /// Tests `Or` namespace visibility and banner constant coverage touchpoints.
+    ///
+    /// Validates that:
+    /// - `Or` type metadata is reachable
+    /// - `OrNameArt` is not empty and contains expected ASCII art content
+    func testOrNamespaceAndBanner() throws {
+
+        let failureMessage = "Test `testOrNamespaceAndBanner` failed"
+
+        let namespaceType: Or.Type = Or.self
+
+        XCTAssertTrue(String(describing: namespaceType) == "Or", failureMessage)
+        XCTAssertFalse(OrNameArt.isEmpty, failureMessage)
+        XCTAssertTrue(OrNameArt.contains("***"), failureMessage)
     }
     
     /// Tests custom object support with the `Thisable` protocol and static methods.

@@ -30,11 +30,13 @@ jobs:
     - name: Export Coverage Report
       run: |
         BIN_PATH=$(swift build --show-bin-path)
+        XCTEST_BUNDLE=$(find "${BIN_PATH}" -name "*.xctest" -maxdepth 1 -type d | head -1)
+        XCTEST_NAME=$(basename "${XCTEST_BUNDLE}" .xctest)
         xcrun llvm-cov export \
           --format=lcov \
           --instr-profile="${BIN_PATH}/codecov/default.profdata" \
           --ignore-filename-regex="\\.build|Tests" \
-          "${BIN_PATH}/OrTests.xctest/Contents/MacOS/OrTests" \
+          "${XCTEST_BUNDLE}/Contents/MacOS/${XCTEST_NAME}" \
           > coverage.lcov
 
     - name: Upload Coverage to Codecov

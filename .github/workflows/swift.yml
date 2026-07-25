@@ -32,9 +32,9 @@ jobs:
     - name: Export Coverage Report
       run: |
         BIN_PATH=$(swift build --show-bin-path)
-        XCTEST_BUNDLE=$(ls -d "${BIN_PATH}"/*.xctest 2>/dev/null | head -n 1)
-        [ -z "${XCTEST_BUNDLE}" ] && { echo "Error: No xctest bundle found in ${BIN_PATH}"; exit 1; }
-        XCTEST_NAME=$(basename "${XCTEST_BUNDLE}" .xctest)
+        XCTEST_BUNDLE="${BIN_PATH}/OrTests.xctest"
+        [ ! -d "${XCTEST_BUNDLE}" ] && { echo "Error: Expected ${XCTEST_BUNDLE} to exist"; exit 1; }
+        XCTEST_NAME="OrTests"
         xcrun llvm-cov export \
           --format=lcov \
           --instr-profile="${BIN_PATH}/codecov/default.profdata" \

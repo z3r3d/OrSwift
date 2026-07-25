@@ -6,7 +6,7 @@
 ![Static Badge](https://img.shields.io/badge/Swift%20Tools%20-%205.10%20-%20blue%20)  
 [![](https://github.com/gchriswill/OrSwift/actions/workflows/swift.yml/badge.svg)](https://github.com/gchriswill/OrSwift/actions/workflows/swift.yml)  
 [![](https://github.com/gchriswill/OrSwift/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/gchriswill/OrSwift/actions/workflows/github-code-scanning/codeql)  
-[![codecov](https://codecov.io/gh/gchriswill/OrSwift/branch/main/graph/badge.svg)](https://codecov.io/gh/gchriswill/OrSwift)  
+[![codecov](https://codecov.io/gh/gchriswill/OrSwift/graph/badge.svg?token=GVI4KES552)](https://codecov.io/gh/gchriswill/OrSwift)  
 
 ---  
 

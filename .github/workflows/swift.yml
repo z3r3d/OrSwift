@@ -34,9 +34,12 @@ jobs:
         BIN_PATH=$(swift build --show-bin-path)
         PROFDATA_PATH="${BIN_PATH}/codecov/default.profdata"
         [ ! -f "${PROFDATA_PATH}" ] && { echo "Error: Expected ${PROFDATA_PATH} to exist"; exit 1; }
-        XCTEST_BUNDLE="${BIN_PATH}/OrTests.xctest"
-        [ ! -d "${XCTEST_BUNDLE}" ] && { echo "Error: Expected ${XCTEST_BUNDLE} to exist"; exit 1; }
-        XCTEST_NAME="OrTests"
+        XCTEST_BUNDLE="${BIN_PATH}/OrPackageTests.xctest"
+        if [ ! -d "${XCTEST_BUNDLE}" ]; then
+          XCTEST_BUNDLE=$(find "${BIN_PATH}" -maxdepth 1 -type d -name "*.xctest" | head -n 1)
+        fi
+        [ -z "${XCTEST_BUNDLE}" ] && { echo "Error: Expected a .xctest bundle in ${BIN_PATH}"; exit 1; }
+        XCTEST_NAME=$(basename "${XCTEST_BUNDLE}" .xctest)
         xcrun llvm-cov export \
           --format=lcov \
           --instr-profile="${PROFDATA_PATH}" \

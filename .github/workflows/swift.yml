@@ -32,12 +32,14 @@ jobs:
     - name: Export Coverage Report
       run: |
         BIN_PATH=$(swift build --show-bin-path)
+        PROFDATA_PATH="${BIN_PATH}/codecov/default.profdata"
+        [ ! -f "${PROFDATA_PATH}" ] && { echo "Error: Expected ${PROFDATA_PATH} to exist"; exit 1; }
         XCTEST_BUNDLE="${BIN_PATH}/OrTests.xctest"
         [ ! -d "${XCTEST_BUNDLE}" ] && { echo "Error: Expected ${XCTEST_BUNDLE} to exist"; exit 1; }
         XCTEST_NAME="OrTests"
         xcrun llvm-cov export \
           --format=lcov \
-          --instr-profile="${BIN_PATH}/codecov/default.profdata" \
+          --instr-profile="${PROFDATA_PATH}" \
           --ignore-filename-regex="\\.build|Tests" \
           "${XCTEST_BUNDLE}/Contents/MacOS/${XCTEST_NAME}" \
           > coverage.lcov

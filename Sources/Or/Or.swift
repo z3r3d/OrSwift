@@ -121,7 +121,7 @@ public extension Thisable {
 /// // result is "Default"
 /// ```
 ///
-/// - Note: This class cannot be instantiated as it has a private initializer.
+/// - Note: This class cannot be instantiated outside this module because it has a non-public initializer.
 public final class Or: Thisable { 
     /// Internal initializer prevents external instantiation of this utility class.
     /// Marked `internal` (rather than `private`) to allow `@testable import Or` to

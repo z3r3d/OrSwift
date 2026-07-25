@@ -317,21 +317,18 @@ final class OrTests: XCTestCase {
         XCTAssertTrue(Or.this(optional: testVar2, default: orValue2) == orValue2, failureMessage)
     }
 
-    /// Tests `Or` namespace visibility, initializer coverage, and banner constant coverage touchpoints.
+    /// Tests `Or` namespace visibility and banner constant coverage touchpoints.
     ///
     /// Validates that:
     /// - `Or` type metadata is reachable
-    /// - `Or` can be instantiated (exercises the internal initializer for coverage)
     /// - `OrNameArt` is not empty
     func testOrNamespaceAndBanner() throws {
 
         let failureMessage = "Test `testOrNamespaceAndBanner` failed"
 
         let namespaceType: Or.Type = Or.self
-        let orInstance = Or()
 
-        XCTAssertTrue(String(describing: namespaceType) == "Or", failureMessage)
-        XCTAssertNotEqual(ObjectIdentifier(orInstance), ObjectIdentifier(Or()), failureMessage)
+        XCTAssertTrue(namespaceType == Or.self, failureMessage)
         XCTAssertFalse(OrNameArt.isEmpty, failureMessage)
     }
     

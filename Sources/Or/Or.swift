@@ -110,7 +110,7 @@ public extension Thisable {
 
 /// A utility class that provides static methods for optional handling.
 ///
-/// The `Or` class serves as a namespace for static utility methods and conforms to `Thisable`
+/// The `Or` class serves as a pure namespace for static utility methods and conforms to `Thisable`
 /// to provide convenient access to the `this(optional:default:)` method without requiring
 /// a specific type to conform to the protocol.
 ///
@@ -121,12 +121,12 @@ public extension Thisable {
 /// // result is "Default"
 /// ```
 ///
-/// - Note: This class cannot be instantiated outside this module because it has a non-public initializer.
-public final class Or: Thisable { 
-    /// Internal initializer prevents external instantiation of this utility class.
-    /// Marked `internal` (rather than `private`) to allow `@testable import Or` to
-    /// exercise this initializer for code coverage purposes.
-    internal init(){} 
+/// - Note: This class cannot be instantiated — it has a `private` initializer and is intended
+///   to be used solely as a static namespace.
+public final class Or: Thisable {
+    /// Private initializer enforces the namespace-only contract of this class.
+    /// This initializer is intentionally private and excluded from coverage reporting.
+    private init(){} // LCOV_EXCL_LINE
 }
 
 /// Extends all Optional types to conform to `Orable`, providing the `or(_:)` method.

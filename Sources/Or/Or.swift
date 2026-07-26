@@ -150,7 +150,7 @@ extension Optional: Orable {
 ///
 /// Provides convenient access to empty string defaults for optional string values.
 /// Supports all types conforming to `StringProtocol`, including `String` and `Substring`.
-extension Optional where Wrapped: StringProtocol {
+extension Optional where Wrapped: StringProtocol & RangeReplaceableCollection {
 
     /// Returns the string value if it exists, otherwise returns an empty string.
     ///
@@ -181,7 +181,7 @@ extension Optional where Wrapped: StringProtocol {
         
         get {
             
-            guard let self = self else { return "" }
+            guard let self = self else { return .init() }
             return self
         }
     }

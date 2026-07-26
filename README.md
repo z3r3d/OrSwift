@@ -85,7 +85,7 @@ Add OrSwift to your project by adding the following to your `Package.swift` file
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/gchriswill/OrSwift.git", from: "1.0.2")
+    .package(url: "https://github.com/gchriswill/OrSwift.git", from: "1.0.3")
 ]
 ```
 

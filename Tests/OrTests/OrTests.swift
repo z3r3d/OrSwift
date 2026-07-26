@@ -92,11 +92,35 @@ final class OrTests: XCTestCase {
         let orValue: Bool = true
         
         let testVar1: Bool? = true
+        let testVar2False: Bool? = false
         let testVar2: Bool? = nil
         
         XCTAssertTrue(testVar1.orTrue, failureMessage)
+        XCTAssertFalse(testVar2False.orTrue, failureMessage)
+        XCTAssertTrue(testVar1.orFalse, failureMessage)
+        XCTAssertFalse(testVar2False.orFalse, failureMessage)
+        XCTAssertTrue(testVar2.orTrue, failureMessage)
         XCTAssertFalse(testVar2.orFalse, failureMessage)
         XCTAssertTrue(testVar2.or(orValue), failureMessage)
+    }
+
+    /// Tests optional Substring handling with the `orEmpty` property.
+    ///
+    /// Validates that:
+    /// - Non-nil optional substrings return their original value
+    /// - Nil optional substrings return an empty substring
+    ///
+    func testOptionalSubstring() throws {
+
+        let failureMessage = "Test `testOptionalSubstring` failed"
+
+        let base = "Hello World"
+        let baseSubstring: Substring = base.prefix(5)
+        let testVar1: Substring? = base.prefix(5)
+        let testVar2: Substring? = nil
+
+        XCTAssertEqual(testVar1.orEmpty, baseSubstring, failureMessage)
+        XCTAssertTrue(testVar2.orEmpty.isEmpty, failureMessage)
     }
     
     /// Tests optional Int handling with the `orZero` property.
@@ -292,6 +316,21 @@ final class OrTests: XCTestCase {
         
         XCTAssertTrue(Or.this(optional: testVar1, default: orValue1) == orValue1, failureMessage)
         XCTAssertTrue(Or.this(optional: testVar2, default: orValue2) == orValue2, failureMessage)
+    }
+
+    /// Tests `Or` namespace visibility and banner constant coverage touchpoints.
+    ///
+    /// Validates that:
+    /// - `Or` type metadata is reachable
+    /// - `OrNameArt` is not empty
+    func testOrNamespaceAndBanner() throws {
+
+        let failureMessage = "Test `testOrNamespaceAndBanner` failed"
+
+        let namespaceType: Or.Type = Or.self
+
+        XCTAssertTrue(namespaceType == Or.self, failureMessage)
+        XCTAssertFalse(OrNameArt.isEmpty, failureMessage)
     }
     
     /// Tests custom object support with the `Thisable` protocol and static methods.
@@ -489,5 +528,46 @@ final class OrTests: XCTestCase {
 
         XCTAssertTrue(nonNilInt.or(fallbackInt) == wrappedInt, failureMessage)
         XCTAssertFalse(nonNilInt.or(fallbackInt) == fallbackInt, failureMessage)
+    }
+
+    /// Tests optional custom collection handling with the array-literal constrained `orEmpty`.
+    ///
+    /// Validates that:
+    /// - Nil optionals of custom `Collection & ExpressibleByArrayLiteral` types return an empty value
+    /// - Non-nil optionals return the wrapped value unchanged
+    ///
+    /// This ensures coverage for the new `Optional where Wrapped: Collection & ExpressibleByArrayLiteral`
+    /// extension beyond standard library collection types.
+    func testOptionalCustomArrayLiteralCollectionOrEmpty() throws {
+
+        let failureMessage = "Test `testOptionalCustomArrayLiteralCollectionOrEmpty` failed"
+
+        struct CustomList<Element: Equatable>: Collection, ExpressibleByArrayLiteral, Equatable {
+            typealias Index = Int
+            typealias ArrayLiteralElement = Element
+
+            private var storage: [Element]
+
+            init(arrayLiteral elements: Element...) {
+                self.storage = elements
+            }
+
+            var startIndex: Int { storage.startIndex }
+            var endIndex: Int { storage.endIndex }
+
+            subscript(position: Int) -> Element {
+                storage[position]
+            }
+
+            func index(after i: Int) -> Int {
+                storage.index(after: i)
+            }
+        }
+
+        let nonNilValue: CustomList<String>? = ["a", "b", "c"]
+        let nilValue: CustomList<String>? = nil
+
+        XCTAssertTrue(nonNilValue.orEmpty == ["a", "b", "c"], failureMessage)
+        XCTAssertTrue(nilValue.orEmpty == [], failureMessage)
     }
 }

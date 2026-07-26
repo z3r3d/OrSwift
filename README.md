@@ -6,6 +6,7 @@
 ![Static Badge](https://img.shields.io/badge/Swift%20Tools%20-%205.10%20-%20blue%20)  
 [![](https://github.com/gchriswill/OrSwift/actions/workflows/swift.yml/badge.svg)](https://github.com/gchriswill/OrSwift/actions/workflows/swift.yml)  
 [![](https://github.com/gchriswill/OrSwift/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/gchriswill/OrSwift/actions/workflows/github-code-scanning/codeql)  
+[![codecov](https://codecov.io/gh/gchriswill/OrSwift/graph/badge.svg)](https://codecov.io/gh/gchriswill/OrSwift)
 
 ---  
 
@@ -50,23 +51,23 @@ Instead of repeating `nil` checks and fallback operators throughout your code, `
 ## Supported Types
 
 ### String Types
-- `String` and `Substring` via `StringProtocol`
-- Property: `.orEmpty` - Returns empty string for `nil` values
+- `String` and `Substring` via `StringProtocol & RangeReplaceableCollection`
+- Property: `.orEmpty` - Returns an empty string for `nil` values
 
-### Boolean Type
-- `Bool` type support
-- Properties: `.orTrue` and `.orFalse` - Returns respective boolean defaults
+### Boolean Types
+- `Bool`
+- Properties: `.orTrue` and `.orFalse` - Return respective boolean defaults
 
 ### Numeric Types
-All `Numeric` protocol conforming types:
-- `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Int128`
-- `UInt`, `UInt8`, `UInt16`, `UInt32`, `UInt64`, `UInt128`
+Common `Numeric` protocol conforming types include:
+- `Int`, `Int8`, `Int16`, `Int32`, `Int64`
+- `UInt`, `UInt8`, `UInt16`, `UInt32`, `UInt64`
 - `Double`, `Float`, `Float16`, `Float80`
 - Property: `.orZero` - Returns `.zero` for `nil` values
 
 ### Collection Types
-- `Array`, `Set`, `Dictionary`
-- Property: `.orEmpty` - Returns appropriate empty collection for `nil` values
+- `Array`, `Set`, `Dictionary` (plus custom types that satisfy the documented literal constraints)
+- Property: `.orEmpty` - Returns an appropriate empty collection for `nil` values
 
 ### Custom Types
 - Type-safe `.or(_:)` method with same-type fallback
@@ -84,7 +85,7 @@ Add OrSwift to your project by adding the following to your `Package.swift` file
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/gchriswill/OrSwift.git", from: "1.0.1")
+    .package(url: "https://github.com/gchriswill/OrSwift.git", from: "1.0.3")
 ]
 ```
 
@@ -232,7 +233,7 @@ public protocol Thisable {
 
 ### Extensions
 
-#### `Optional where Wrapped: StringProtocol`
+#### `Optional where Wrapped: StringProtocol & RangeReplaceableCollection`
 - `var orEmpty: Wrapped { get }`
 
 #### `Optional where Wrapped == Bool`
@@ -242,7 +243,10 @@ public protocol Thisable {
 #### `Optional where Wrapped: Numeric`
 - `var orZero: Wrapped { get }`
 
-#### `Optional where Wrapped: Collection`
+#### `Optional where Wrapped: Collection & ExpressibleByArrayLiteral`
+- `var orEmpty: Wrapped { get }`
+
+#### `Optional where Wrapped: Collection & ExpressibleByDictionaryLiteral`
 - `var orEmpty: Wrapped { get }`
 
 ## Contributing

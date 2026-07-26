@@ -9,13 +9,16 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-
 jobs:
   build:
 
     runs-on: macos-latest
+
+    permissions:
+      contents: read
+      checks: write
+      statuses: write
+      pull-requests: write
 
     steps:
     - name: Checkout code
@@ -24,9 +27,35 @@ jobs:
     - name: Build
       run: swift build -v
       
-    - name: Run Tests
-      run: swift test -v --parallel
-      
+    - name: Run Tests with Coverage
+      run: swift test -v --parallel --enable-code-coverage
+
+    - name: Export Coverage Report
+      run: |
+        BIN_PATH=$(swift build --show-bin-path)
+        PROFDATA_PATH="${BIN_PATH}/codecov/default.profdata"
+        [ ! -f "${PROFDATA_PATH}" ] && { echo "Error: Expected ${PROFDATA_PATH} to exist"; exit 1; }
+        XCTEST_BUNDLE="${BIN_PATH}/OrPackageTests.xctest"
+        if [ ! -d "${XCTEST_BUNDLE}" ]; then
+          XCTEST_BUNDLE=$(find "${BIN_PATH}" -maxdepth 1 -type d -name "*.xctest" | head -n 1)
+        fi
+        [ -z "${XCTEST_BUNDLE}" ] && { echo "Error: Expected a .xctest bundle in ${BIN_PATH}"; exit 1; }
+        XCTEST_NAME=$(basename "${XCTEST_BUNDLE}" .xctest)
+        xcrun llvm-cov export \
+          --format=lcov \
+          --instr-profile="${PROFDATA_PATH}" \
+          --ignore-filename-regex="\\.build|Tests" \
+          "${XCTEST_BUNDLE}/Contents/MacOS/${XCTEST_NAME}" \
+          > coverage.lcov
+
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        files: coverage.lcov
+        fail_ci_if_error: false
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
     - name: Test Summary
       run: |
         echo "✅ All tests completed successfully!"

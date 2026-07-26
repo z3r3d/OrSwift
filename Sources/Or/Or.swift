@@ -146,10 +146,12 @@ extension Optional: Orable {
 
 // MARK: - Extensions
 
-/// Extension for Optional types wrapping StringProtocol-conforming values.
+/// Extension for Optional types wrapping values that conform to both `StringProtocol`
+/// and `RangeReplaceableCollection`.
 ///
 /// Provides convenient access to empty string defaults for optional string values.
-/// Supports all types conforming to `StringProtocol`, including `String` and `Substring`.
+/// Supports types that conform to both `StringProtocol` and `RangeReplaceableCollection`,
+/// such as `String`.
 extension Optional where Wrapped: StringProtocol & RangeReplaceableCollection {
 
     /// Returns the string value if it exists, otherwise returns an empty string.
@@ -160,8 +162,7 @@ extension Optional where Wrapped: StringProtocol & RangeReplaceableCollection {
     ///
     /// ## Supported Types
     /// - `String`
-    /// - `Substring`
-    /// - Any type conforming to `StringProtocol`
+    /// - Any type conforming to both `StringProtocol` and `RangeReplaceableCollection`
     ///
     /// ## Example Usage
     /// ```swift
@@ -359,5 +360,4 @@ extension Optional where Wrapped: Collection {
         }
     }
 }
-
 

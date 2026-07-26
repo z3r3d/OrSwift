@@ -529,4 +529,45 @@ final class OrTests: XCTestCase {
         XCTAssertTrue(nonNilInt.or(fallbackInt) == wrappedInt, failureMessage)
         XCTAssertFalse(nonNilInt.or(fallbackInt) == fallbackInt, failureMessage)
     }
+
+    /// Tests optional custom collection handling with the array-literal constrained `orEmpty`.
+    ///
+    /// Validates that:
+    /// - Nil optionals of custom `Collection & ExpressibleByArrayLiteral` types return an empty value
+    /// - Non-nil optionals return the wrapped value unchanged
+    ///
+    /// This ensures coverage for the new `Optional where Wrapped: Collection & ExpressibleByArrayLiteral`
+    /// extension beyond standard library collection types.
+    func testOptionalCustomArrayLiteralCollectionOrEmpty() throws {
+
+        let failureMessage = "Test `testOptionalCustomArrayLiteralCollectionOrEmpty` failed"
+
+        struct CustomList<Element: Equatable>: Collection, ExpressibleByArrayLiteral, Equatable {
+            typealias Index = Int
+            typealias ArrayLiteralElement = Element
+
+            private var storage: [Element]
+
+            init(arrayLiteral elements: Element...) {
+                self.storage = elements
+            }
+
+            var startIndex: Int { storage.startIndex }
+            var endIndex: Int { storage.endIndex }
+
+            subscript(position: Int) -> Element {
+                storage[position]
+            }
+
+            func index(after i: Int) -> Int {
+                storage.index(after: i)
+            }
+        }
+
+        let nonNilValue: CustomList<String>? = ["a", "b", "c"]
+        let nilValue: CustomList<String>? = nil
+
+        XCTAssertTrue(nonNilValue.orEmpty == ["a", "b", "c"], failureMessage)
+        XCTAssertTrue(nilValue.orEmpty == [], failureMessage)
+    }
 }

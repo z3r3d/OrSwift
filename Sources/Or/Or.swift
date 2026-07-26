@@ -125,9 +125,7 @@ public extension Thisable {
 ///   to be used solely as a static namespace.
 public final class Or: Thisable {
     /// Private initializer enforces the namespace-only contract of this class.
-    // coverage: ignore-start
     private init() {}
-    // coverage: ignore-end
 }
 
 /// Extends all Optional types to conform to `Orable`, providing the `or(_:)` method.
@@ -143,13 +141,13 @@ extension Optional: Orable {
     }
 }
 
-
 // MARK: - Extensions
 
-/// Extension for Optional types wrapping StringProtocol-conforming values.
+/// Extension for Optional types wrapping values that conform to both
+/// `StringProtocol` and `RangeReplaceableCollection`.
 ///
 /// Provides convenient access to empty string defaults for optional string values.
-/// Supports all types conforming to `StringProtocol`, including `String` and `Substring`.
+/// Supports common string types such as `String` and `Substring`.
 extension Optional where Wrapped: StringProtocol & RangeReplaceableCollection {
 
     /// Returns the string value if it exists, otherwise returns an empty string.
@@ -161,7 +159,7 @@ extension Optional where Wrapped: StringProtocol & RangeReplaceableCollection {
     /// ## Supported Types
     /// - `String`
     /// - `Substring`
-    /// - Any type conforming to `StringProtocol`
+    /// - Any type conforming to both `StringProtocol` and `RangeReplaceableCollection`
     ///
     /// ## Example Usage
     /// ```swift
@@ -264,8 +262,8 @@ extension Optional where Wrapped: Numeric {
     ///
     /// ## Supported Types
     /// All `Numeric` protocol conforming types including:
-    /// - **Integers**: `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Int128`
-    /// - **Unsigned Integers**: `UInt`, `UInt8`, `UInt16`, `UInt32`, `UInt64`, `UInt128`
+    /// - **Integers**: `Int`, `Int8`, `Int16`, `Int32`, `Int64`
+    /// - **Unsigned Integers**: `UInt`, `UInt8`, `UInt16`, `UInt32`, `UInt64`
     /// - **Floating Point**: `Double`, `Float`, `Float16`, `Float80`
     ///
     /// ## Example Usage
@@ -295,30 +293,25 @@ extension Optional where Wrapped: Numeric {
     }
 }
 
-/// Extension for Optional Collection values.
+/// Extension for Optional collection values that support array-literal defaults.
 ///
 /// Provides convenient access to empty collection defaults for optional collection values.
-/// Supports common collection types including `Array`, `Set`, and `Dictionary`.
-extension Optional where Wrapped: Collection {
+/// This includes standard collection types like `Array` and `Set`.
+extension Optional where Wrapped: Collection & ExpressibleByArrayLiteral {
     
     /// Returns the collection if it exists, otherwise returns an appropriate empty collection.
     ///
     /// This computed property provides a clean way to handle optional collections by returning
-    /// an empty collection of the same type when the optional is `nil`. The method uses type
-    /// casting to determine the appropriate empty collection type.
+    /// an empty collection of the same type when the optional is `nil`.
     ///
     /// ## Supported Collection Types
     /// - `Array<Element>` - Returns `[]`
     /// - `Set<Element>` - Returns `Set<Element>()`
-    /// - `Dictionary<Key, Value>` - Returns `[:]`
     ///
     /// ## Example Usage
     /// ```swift
     /// let optionalArray: [String]? = nil
     /// let items = optionalArray.orEmpty       // Returns []
-    ///
-    /// let optionalDict: [String: Int]? = nil
-    /// let dict = optionalDict.orEmpty         // Returns [:]
     ///
     /// let optionalSet: Set<String>? = nil
     /// let set = optionalSet.orEmpty           // Returns Set<String>()
@@ -330,32 +323,43 @@ extension Optional where Wrapped: Collection {
     /// - Returns: The collection if not `nil`, otherwise an appropriate empty collection
     /// - Complexity: O(1)
     ///
-    /// - Important: This method supports `Set`, `Array`, and `Dictionary` collections.
-    ///   Using it with unsupported collection types will result in a runtime error.
+    /// - Important: This method is available for collection types that conform to `ExpressibleByArrayLiteral`.
     @inlinable
     public var orEmpty: Wrapped {
         
         @inline(__always)
 
         get {
+            return self ?? []
+        }
+    }
+}
 
-            guard let self = self else {
-                // Optimized: Check most common types first for better branch prediction
-                if let emptyArray = [] as? Wrapped {
-                    return emptyArray
-                } else if let emptyDictionary = [:] as? Wrapped {
-                    return emptyDictionary
-                } else if let emptySet = Set<AnyHashable>([]) as? Wrapped {
-                    return emptySet
-                }
+/// Extension for Optional collection values that support dictionary-literal defaults.
+///
+/// Provides convenient access to empty dictionary defaults for optional collection values.
+extension Optional where Wrapped: Collection & ExpressibleByDictionaryLiteral {
 
-                // coverage: ignore-start
-                fatalError("`orEmpty` is only available for Set, Array and Dictionary collections.")
-                // coverage: ignore-end
-            }
-           
-            
-            return self
+    /// Returns the collection if it exists, otherwise returns an empty dictionary.
+    ///
+    /// This computed property provides a clean way to handle optional dictionary-literal
+    /// collections by returning an empty dictionary when the optional is `nil`.
+    ///
+    /// ## Example Usage
+    /// ```swift
+    /// let optionalDict: [String: Int]? = nil
+    /// let dict = optionalDict.orEmpty         // Returns [:]
+    /// ```
+    ///
+    /// - Returns: The collection if not `nil`, otherwise an empty dictionary
+    /// - Complexity: O(1)
+    @inlinable
+    public var orEmpty: Wrapped {
+
+        @inline(__always)
+
+        get {
+            return self ?? [:]
         }
     }
 }

@@ -261,7 +261,7 @@ extension Optional where Wrapped: Numeric {
     /// the `Numeric` protocol's `.zero` property.
     ///
     /// ## Supported Types
-    /// All `Numeric` protocol conforming types including:
+    /// Common `Numeric` protocol conforming types include:
     /// - **Integers**: `Int`, `Int8`, `Int16`, `Int32`, `Int64`
     /// - **Unsigned Integers**: `UInt`, `UInt8`, `UInt16`, `UInt32`, `UInt64`
     /// - **Floating Point**: `Double`, `Float`, `Float16`, `Float80`
@@ -363,5 +363,4 @@ extension Optional where Wrapped: Collection & ExpressibleByDictionaryLiteral {
         }
     }
 }
-
 

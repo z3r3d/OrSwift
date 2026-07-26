@@ -59,7 +59,7 @@ Instead of repeating `nil` checks and fallback operators throughout your code, `
 - Properties: `.orTrue` and `.orFalse` - Return respective boolean defaults
 
 ### Numeric Types
-All `Numeric` protocol conforming types:
+Common `Numeric` protocol conforming types include:
 - `Int`, `Int8`, `Int16`, `Int32`, `Int64`
 - `UInt`, `UInt8`, `UInt16`, `UInt32`, `UInt64`
 - `Double`, `Float`, `Float16`, `Float80`
